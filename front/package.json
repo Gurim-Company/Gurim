@@ -1,0 +1,25 @@
+{
+  "name": "frontend",
+  "packageManager": "yarn@3.1.1",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "eslint ./packages --ext .ts,.js --cache",
+    "common-components": "yarn workspace @common/components",
+    "common-styles": "yarn workspace @common/styles",
+    "common-utils": "yarn workspace @common/utils",
+    "admin": "yarn workspace admin",
+    "client": "yarn workspace client",
+    "prepare": "husky install ./.husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.4",
+    "@commitlint/config-conventional": "^16.2.4",
+    "concurrently": "^7.1.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.1"
+  }
+}

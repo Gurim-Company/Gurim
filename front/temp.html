@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      padding: 1rem;
+    }
+
+    .col {
+      padding-right: 0.5rem;
+      padding-left: 0.5rem;
+    }
+
+    .col-3 {
+      flex-basis: 25%;
+    }
+
+    .col-9 {
+      flex-basis: 75%;
+
+    }
+
+    h3 {
+      text-align: center;
+      margin-bottom: 0.5rem;
+
+    }
+
+    .editor-view {
+      border: 2px dotted #efefef;
+      min-height: 400px;
+      width: 100%;
+    }
+
+
+    .comp {
+      background: #2a9d8f;
+      color: #fff;
+      height: 50px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .actual-comp {
+      position: relative;
+      max-width: 100%;
+    }
+
+    /*&-remove {*/
+    /*     position: absolute;*/
+    /*     color: red;*/
+    /*     top: calc(50% - 12px);*/
+    /*     right: 15px;*/
+    /*     font-weight: bold;*/
+    /*     cursor: pointer;*/
+    /*     pointer-events: all;*/
+    /* }*/
+
+    /*
+     * These are all the components styled not really important for the actual purpose */
+    header {
+      background: #264653;
+      height: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      padding: 0 1rem;
+    }
+
+    a {
+      color: #fff;
+    }
+
+    .image {
+      max-width: 100%;
+      border-radius: 5px;
+      border: 5px solid #efefef;
+      margin: 0.5rem 0;
+    }
+
+    footer {
+      background: #264653;
+      color: #fff;
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .text {
+      margin: 0.5rem;
+    }
+
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <div class="col col-3">
+    <div class="comp-holder">
+      <div data-table="comp-01" class="comp js-draggable" draggable='true' ondragstart='onDragStart(event);'
+           ondragend="onDragEnd(event);" data-cloneable="true">
+        [Header component]
+      </div>
+      <div data-table="comp-02" class="comp js-draggable" draggable='true' ondragstart='onDragStart(event);'
+           ondragend="onDragEnd(event);" data-cloneable="true">
+        [Image component]
+      </div>
+      <div data-table="comp-03" class="comp js-draggable" draggable='true' ondragstart='onDragStart(event);'
+           ondragend="onDragEnd(event);" data-cloneable="true">
+        [Text component]
+      </div>
+
+      <div data-table="comp-04" class="comp js-draggable" draggable='true' ondragstart='onDragStart(event);'
+           ondragend="onDragEnd(event);" data-cloneable="true">
+        [Footer component]
+      </div>
+    </div>
+  </div>
+  <div class="col col-9">
+    <h3>Dropzone</h3>
+    <div id="dropzone" class="editor-view" ondragover='onDragOver(event);' ondrop='onDrop(event);'>
+    </div>
+  </div>
+
+  <div class="hidden">
+    <header class="actual-comp" id="comp-01">
+      <a href="https://daily-dev-tips.com">
+        <img src="https://daily-dev-tips.com/images/logo.png" height="50"/>
+      </a>
+      <a href="#">Menu</a>
+    </header>
+    <div class="actual-comp" id="comp-02">
+      <img class="image"
+           src="https://images.unsplash.com/photo-1587588354456-ae376af71a25?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"/>
+    </div>
+    <div class="actual-comp" id="comp-03">
+      <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer quis cursus massa, eget
+        fringilla dolor. Praesent ligula libero, luctus sit amet urna a, semper scelerisque lorem. Curabitur
+        efficitur, tortor in tempor elementum, orci quam mollis quam, nec fermentum lacus mauris eu nisl.
+        Praesent elementum eros et justo faucibus, sed vestibulum mauris tincidunt. Aenean suscipit ultrices
+        tellus, at aliquam diam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+        inceptos himenaeos. Vivamus non maximus mauris, nec finibus risus. Donec sit amet massa malesuada,
+        mollis mi nec, condimentum justo. Pellentesque velit ligula, feugiat eget nisi quis, mattis eleifend
+        sem. Proin pretium risus ligula, a aliquet elit commodo sit amet.</p>
+    </div>
+    <footer class="actual-comp" id="comp-04">&copy; Daily Dev Tips 2020</footer>
+  </div>
+</div>
+
+<script>
+  // Global vars
+  const dropzone = document.getElementById("dropzone");
+
+  function onDragStart(event) {
+    const json = event.currentTarget.dataset
+    if (json.cloneable) {
+      json.id = event.currentTarget.id
+    }
+    event.dataTransfer.setData("text/plain", JSON.stringify(json));
+    event.dataTransfer.effectAllowed = "copy"
+    event.currentTarget.style.backgroundColor = "#e9c46a";
+  }
+
+  function onDragEnd(event) {
+    event.currentTarget.style.backgroundColor = "#2a9d8f";
+  }
+
+  function onDragOver(event) {
+    event.preventDefault();
+  }
+
+  function onDrop(event) {
+    // 부모인지 자식인지 구별
+    const data = JSON.parse(event.dataTransfer.getData('text/plain'));
+
+    // 부모이면 clone
+    if (data.cloneable === 'true') {
+      // let id = event.dataTransfer.getData("text")
+      const id = data.table;
+      const draggableElement = document.getElementById(id);
+      const clone = draggableElement.cloneNode(true);
+      clone.setAttribute('draggable', true)
+      clone.setAttribute('data-cloneable', false)
+      clone.addEventListener('dragstart', evt => onDragStart(evt));
+      dropzone.appendChild(clone);
+      event.dataTransfer.clearData();
+    } else {
+      // 자식이면 드래그 이동
+
+      const cloneable = document.getElementById(data.id);
+      console.log('clone', cloneable)
+      cloneable.addEventListener('mousedown', evt => move(evt))
+    }
+
+    // let id = event.dataTransfer.getData("text")
+    // const draggableElement = document.getElementById(id);
+    // const clone = draggableElement.cloneNode(true);
+    // clone.setAttribute('draggable', true)
+    // 자식이면 드래그 이동
+    // dropzone.appendChild(clone);
+    // event.dataTransfer.clearData();
+  }
+
+  //
+  function move(event) {
+    const clone = event.target
+    let shiftX = event.clientX - clone.getBoundingClientRect().left;
+    let shiftY = event.clientY - clone.getBoundingClientRect().top;
+
+    clone.style.position = 'absolute';
+    clone.style.zIndex = 1000;
+    document.body.append(clone);
+
+    moveAt(event.pageX, event.pageY);
+
+    // moves the clone at (pageX, pageY) coordinates
+    // taking initial shifts into account
+    function moveAt(pageX, pageY) {
+      clone.style.left = pageX - shiftX + 'px';
+      clone.style.top = pageY - shiftY + 'px';
+    }
+
+    function onMouseMove(event) {
+      moveAt(event.pageX, event.pageY);
+    }
+
+    // move the clone on mousemove
+    document.addEventListener('mousemove', onMouseMove);
+
+    // drop the clone, remove unneeded handlers
+    clone.onmouseup = function () {
+      document.removeEventListener('mousemove', onMouseMove);
+      clone.onmouseup = null;
+    }
+  };
+
+  // clone.ondragstart = function () {
+  //     return false;
+  // };
+</script>
+</body>
+</html>

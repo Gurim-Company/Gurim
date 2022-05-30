@@ -1,0 +1,91 @@
+
+server:
+  port: 50000
+  # ??? ????
+  shutdown: graceful
+  forward-headers-strategy: framework
+spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          # spring <-> jdbc <-> DB ???
+          time_zone: Asia/Seoul
+        direct: org.hibernate.dialect.MySQL5InnoDBDialect
+        default_schema: rookie_checker
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    # ?? ?? ??
+  output:
+    ansi:
+      enabled: always
+  # json ??? ?? ? ?? ?? ??
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  # ?? ???
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  # ???
+  messages:
+    encoding: UTF-8
+  # ?? ??? ????
+  jwt:
+    secret: Fekwmwiej23)(#@8uej2KEN#urh72ru@*782hjkwe
+  freemarker:
+    check-template-location: false
+  # ??? ?? ?? off
+  batch:
+    job:
+      enabled: false
+    # ?? ??? ??
+  #    jdbc:
+  #      schema: batch
+  #      table-prefix: batch.BATCH_
+  # flyway
+  flyway:
+    # ??? ??
+    baseline-on-migrate: true
+    #?? ??
+    #baseline-version: 0
+    #??
+    locations: classpath:db/{vendor}/common
+# local
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: "jdbc:mariadb://localhost:3306/exhibition?characterEncoding=UTF-8"
+    username: username
+    password: password
+  jpa:
+    # db ????
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    # ?? ??
+    properties:
+      hibernate:
+        format_sql: true
+---
+
+# test
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: "jdbc:mariadb://localhost:3306/exhibition?characterEncoding=UTF-8"
+    username: username
+    password: password
+  jpa:
+    generate-ddl: true
+---
